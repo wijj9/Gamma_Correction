@@ -4,8 +4,8 @@
 #include <getopt.h>
 #include <time.h>
 
-#include "header_files/gammaCorrect.h"
-#include "header_files/getAndEditPPM.h"
+#include "./server/header_files/gammaCorrect.h"
+#include "./server/header_files/getAndEditPPM.h"
 
 extern int height;
 extern int width;

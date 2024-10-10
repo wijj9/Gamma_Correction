@@ -3,10 +3,14 @@ import os
 import subprocess
 from PIL import Image
 
-app = Flask(__name__)
+# Update to reflect new project structure
+app = Flask(__name__,
+            static_folder=os.path.join(os.path.dirname(__file__), '../client/static'),
+            template_folder=os.path.join(os.path.dirname(__file__), '../client/templates'))
 
-UPLOAD_FOLDER = 'uploads/'
-OUTPUT_FOLDER = 'output/'
+# Update paths according to the new structure
+UPLOAD_FOLDER = 'server/uploads/'  # Adjusted to 'server/uploads'
+OUTPUT_FOLDER = 'server/output/'   # Adjusted to 'server/output'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
@@ -58,9 +62,9 @@ def serve_output_file(filename):
 @app.route('/upload', methods=['POST'])
 def upload_image():
     # Save the uploaded image
-    if 'image' not in request.files:  # Change 'file' to 'image'
+    if 'image' not in request.files:
         return jsonify({'error': "No file part"}), 400
-    file = request.files['image']  # Change 'file' to 'image'
+    file = request.files['image']
     if file.filename == '':
         return jsonify({'error': "No selected file"}), 400
     if file:

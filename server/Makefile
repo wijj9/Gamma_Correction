@@ -10,7 +10,7 @@ ifdef DEBUG
     DEBUG_FLAGS = -DDEBUG
 endif
 
-gammaCorr: main.c src/gammaCorrect.c src/getAndEditPPM.c
+gammaCorr: ../main.c src/gammaCorrect.c src/getAndEditPPM.c
 	gcc $(CFLAGS) -o $@ $^ -lm
 
 .PHONY: clean

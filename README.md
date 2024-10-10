@@ -17,7 +17,7 @@ The Input file: `mandrill.ppm`
 
 The Execution command: `./gammaCorr Input_Images/mandrill.ppm --gamma 2.0 --output Result_Images/result.ppm`
 
-![Mandrill Image](Readme_Images/mandrill.png)
-![Result Image](Readme_Images/result.png)
+![Mandrill Image](images/Readme_Images/mandrill.png)
+![Result Image](images/Readme_Images/result.png)
 
 
