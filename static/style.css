@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    display: flex; /* Enable flexbox for centering */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Full viewport height */
+}
+
+#file_input_container {
+    width: 300px;
+    text-align: center; /* Center text within the container */
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#fileInput {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#imagePreviewContainer {
+    margin-top: 10px;
+    display: flex; /* Use flexbox to center image */
+    justify-content: center; /* Center the image horizontally */
+}
+
+#imagePreviewContainer img {
+    max-width: 100%; /* Ensure image does not overflow container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners for the image */
+}
+
+#submitBtn {
+    display: block; /* Display button as block element */
+    margin: 20px auto; /* Center button horizontally */
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#downloadSection {
+    margin-top: 20px;
+    text-align: center; /* Center the download section */
+}
+
+#downloadLink {
+    font-size: 16px;
+    color: #007BFF; /* Link color */
+    text-decoration: none; /* Remove underline */
+    border: 1px solid #007BFF; /* Add border to the link */
+    padding: 10px 20px; /* Padding around link */
+    border-radius: 4px; /* Rounded corners for the link */
+}
+
+#downloadLink:hover {
+    background-color: #007BFF; /* Change background on hover */
+    color: white; /* Change text color on hover */
+}
+
+div {
+    text-align: center; /* Center text in all divs */
+}
