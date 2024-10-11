@@ -1,3 +1,5 @@
+import tempfile
+
 from flask import Flask, request, render_template, send_file, jsonify, send_from_directory
 import os
 import subprocess
@@ -61,42 +63,58 @@ def serve_output_file(filename):
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
-    # Save the uploaded image
+    # Save the uploaded image to a temporary file
     if 'image' not in request.files:
         return jsonify({'error': "No file part"}), 400
     file = request.files['image']
     if file.filename == '':
         return jsonify({'error': "No selected file"}), 400
-    if file:
-        input_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        output_path = os.path.join(app.config['OUTPUT_FOLDER'], file.filename.rsplit('.', 1)[0] + '.ppm')
+
+    # Create a temporary file for the input image
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".ppm") as temp_input_file:
+        input_path = temp_input_file.name
         file.save(input_path)
 
-        # Prepare the command with the provided options
-        command = ['./gammaCorr', input_path, '--output', output_path]
+        # Create a temporary file for the output image
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_output_file:
+            output_path = temp_output_file.name
 
-        # Get additional parameters from the form
-        gamma_value = request.form.get('gamma')
-        if gamma_value:
-            command.extend(['--gamma', gamma_value])
+            # Prepare the command with the provided options
+            command = ['./gammaCorr', input_path, '--output', output_path]
 
-        coeffs_value = request.form.get('coeffs')
-        if coeffs_value:
-            command.extend(['--coeffs', coeffs_value])
+            # Get additional parameters from the form
+            gamma_value = request.form.get('gamma')
+            if gamma_value:
+                command.extend(['--gamma', gamma_value])
 
-        version_value = request.form.get('version')
-        if version_value:
-            command.extend(['--version', version_value])
+            coeffs_value = request.form.get('coeffs')
+            if coeffs_value:
+                command.extend(['--coeffs', coeffs_value])
 
-        benchmark_value = request.form.get('benchmark')
-        if benchmark_value:
-            command.extend(['--benchmark', benchmark_value])
+            version_value = request.form.get('version')
+            if version_value:
+                command.extend(['--version', version_value])
 
-        # Call the C program (gammaCorr) with the uploaded image and options
-        subprocess.run(command)
+            benchmark_value = request.form.get('benchmark')
+            if benchmark_value:
+                command.extend(['--benchmark', benchmark_value])
 
-        # Return the URL to download the processed image
-        return jsonify({"processedImageUrl": f"/output/{file.filename.rsplit('.', 1)[0]}.png"})  # Adjusted the return to use the correct URL format
+            # Call the C program (gammaCorr) with the uploaded image and options
+            try:
+                subprocess.run(command, check=True)
+
+                # Check if the output image was saved correctly
+                if os.path.exists(output_path):
+                    print(f"Processed image saved at {output_path}")
+                else:
+                    return jsonify({'error': "Image conversion failed"}), 500
+
+                # Return the URL to download the processed image
+                return jsonify({"processedImageUrl": f"/output/{os.path.basename(output_path)}"})
+
+            except subprocess.CalledProcessError as e:
+                return jsonify({'error': f"Error during processing: {e}"}), 500
+
 
 @app.route('/download/<filename>')
 def download_image(filename):
