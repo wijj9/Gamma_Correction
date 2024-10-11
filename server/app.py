@@ -80,7 +80,7 @@ def upload_image():
             output_path = temp_output_file.name
 
             # Prepare the command with the provided options
-            command = ['./gammaCorr', input_path, '--output', output_path]
+            command = [os.path.join(os.path.dirname(__file__), 'gammaCorr'), input_path, '--output', '/dev/stdout']
 
             # Get additional parameters from the form
             gamma_value = request.form.get('gamma')
